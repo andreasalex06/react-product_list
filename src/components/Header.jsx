@@ -1,7 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { SearchInput } from "./SearchInput";
 
-export function Header({ cart }) {
+export function Header({
+  cart = [],
+  search,
+  onSearchChange,
+  onSearchSubmit,
+}) {
   const location = useLocation();
 
   const totalItems = cart.reduce(
@@ -10,17 +16,31 @@ export function Header({ cart }) {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
 
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+
+        {/* Logo */}
         <Link
           to="/"
-          className="text-xl font-bold text-gray-900"
+          className="shrink-0 text-xl font-bold tracking-tight text-gray-900 transition-opacity hover:opacity-80"
         >
           Store
         </Link>
 
-        <nav className="flex items-center gap-2">
+        {/* Search */}
+        <div className="mx-2 hidden max-w-md flex-1 sm:block sm:mx-4">
+
+          <SearchInput
+            value={search}
+            onChange={onSearchChange}
+            onSubmit={onSearchSubmit}
+          />
+
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
 
           <Button
             asChild
@@ -29,6 +49,8 @@ export function Header({ cart }) {
                 ? "default"
                 : "ghost"
             }
+            size="sm"
+            className="hidden sm:inline-flex"
           >
             <Link to="/">
               Home
@@ -42,6 +64,7 @@ export function Header({ cart }) {
                 ? "default"
                 : "ghost"
             }
+            size="sm"
           >
             <Link to="/products">
               Products
@@ -55,15 +78,41 @@ export function Header({ cart }) {
                 ? "default"
                 : "ghost"
             }
+            size="sm"
           >
-            <Link to="/cart">
-              Cart ({totalItems})
+            <Link
+              to="/cart"
+              className="flex items-center gap-1.5"
+            >
+              <span>
+                Cart
+              </span>
+
+              {totalItems > 0 && (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
+                  {totalItems > 99
+                    ? "99+"
+                    : totalItems}
+                </span>
+              )}
+
             </Link>
           </Button>
 
         </nav>
 
       </div>
+
+      <div className="border-t border-gray-100 px-4 py-3 sm:hidden">
+
+        <SearchInput
+          value={search}
+          onChange={onSearchChange}
+          onSubmit={onSearchSubmit}
+        />
+
+      </div>
+
     </header>
   );
 }

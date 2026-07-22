@@ -10,7 +10,7 @@ export function ProductCard({ product, isAdded, onAdd }) {
         className="block overflow-hidden bg-gray-100"
       >
         <img
-          src={product.image}
+          src={`${import.meta.env.VITE_API_URL}/uploads/${product.image}`}
           alt={product.name}
           className="h-56 w-full object-cover transition duration-300 group-hover:scale-105"
         />

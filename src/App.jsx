@@ -10,9 +10,13 @@ import { CartPage } from "./pages/CartPage";
 function App() {
   const [cart, setCart] = useState([]);
 
+  const [search, setSearch] = useState("");
+
   function handleAdd(product) {
     setCart((prevCart) => {
-      const exist = prevCart.find((item) => item.id === product.id);
+      const exist = prevCart.find(
+        (item) => item.id === product.id
+      );
 
       if (exist) {
         return prevCart.map((item) =>
@@ -21,7 +25,7 @@ function App() {
                 ...item,
                 quantity: item.quantity + 1,
               }
-            : item,
+            : item
         );
       }
 
@@ -43,8 +47,8 @@ function App() {
               ...item,
               quantity: item.quantity + 1,
             }
-          : item,
-      ),
+          : item
+      )
     );
   }
 
@@ -57,22 +61,46 @@ function App() {
                 ...item,
                 quantity: item.quantity - 1,
               }
-            : item,
+            : item
         )
-        .filter((item) => item.quantity > 0),
+        .filter((item) => item.quantity > 0)
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Header cart={cart} />
+
+      {/* Header */}
+      <Header
+        cart={cart}
+        search={search}
+        onSearchChange={setSearch}
+        onSearchSubmit={() => {
+          console.log("Search:", search);
+        }}
+      />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+
+        {/* Home */}
+        <Route
+          path="/"
+          element={<Home />}
+        />
+
+        {/* Products */}
         <Route
           path="/products"
-          element={<Products cart={cart} onAdd={handleAdd} />}
+          element={
+            <Products
+              cart={cart}
+              onAdd={handleAdd}
+              search={search}
+            />
+          }
         />
+
+        {/* Cart */}
         <Route
           path="/cart"
           element={
@@ -83,11 +111,20 @@ function App() {
             />
           }
         />
+
+        {/* Product Detail */}
         <Route
           path="/products/:id"
-          element={<ProductDetail cart={cart} onAdd={handleAdd} />}
+          element={
+            <ProductDetail
+              cart={cart}
+              onAdd={handleAdd}
+            />
+          }
         />
+
       </Routes>
+
     </div>
   );
 }
